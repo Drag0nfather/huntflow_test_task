@@ -17,7 +17,8 @@ class BirthdateApplicantEntity:
 
 @dataclass
 class CompanyApplicantEntity:
-    position: int
+    position: str
+    company: str
 
 
 @dataclass
