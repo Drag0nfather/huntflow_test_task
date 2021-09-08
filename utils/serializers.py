@@ -20,6 +20,7 @@ class PhotoApplicantSerializer(Schema):
 
 class CompanyApplicantSerializer(Schema):
     position = fields.String()
+    company = fields.String()
 
 
 class SubFieldsApplicantSerializer(Schema):
