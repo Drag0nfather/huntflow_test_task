@@ -4,6 +4,7 @@ import requests
 
 from utils.base_connector import BaseConnector
 from utils.entities import ApplicantEntity, ApplicantStatusesEntity, VacancyEntity
+from utils.exceptions import WrongVacancyNameException, WrongStatusNameException
 from utils.lib import get_file_name
 from utils.serializers import InputApplicantSerializer, ApplicantStatusesSerializer, VacancySerializer
 from utils.settings import HUNTFLOW
@@ -48,16 +49,46 @@ class HuntFlowApiConnector(BaseConnector):
         body = {
             'last_name': upload.fields['name']['last'],
             'first_name': upload.fields['name']['first'],
-            'middle_name': upload.fields['name']['middle'],
-            'phone': upload.fields['phones'][0],
-            'email': upload.fields['email'],
-            'position': upload.fields['position'],
-            'company': upload.fields['experience'][0]['position'],
-            'money': upload.fields['salary'],
-            'birthday_day': upload.fields['birthdate']['day'],
-            'birthday_month': upload.fields['birthdate']['month'],
-            'birthday_year': upload.fields['birthdate']['year'],
-            'photo': upload.photo['id'],
+            'middle_name': (
+                upload.fields['name']['middle']
+                if upload.fields['name'] else None
+            ),
+            'phone': (
+                upload.fields['phones'][0]
+                if upload.fields['phones'] else None
+            ),
+            'email': (
+                upload.fields['email']
+                if upload.fields['email'] else None
+            ),
+            'position': (
+                upload.fields['experience'][0]['position']
+                if upload.fields['experience'] else None
+            ),
+            'company': (
+                upload.fields['experience'][0]['company']
+                if upload.fields['experience'] else None
+            ),
+            'money': (
+                upload.fields['salary']
+                if upload.fields['salary'] else None
+            ),
+            'birthday_day': (
+                upload.fields['birthdate']['day']
+                if upload.fields['birthdate'] else None
+            ),
+            'birthday_month': (
+                upload.fields['birthdate']['month']
+                if upload.fields['birthdate'] else None
+            ),
+            'birthday_year': (
+                upload.fields['birthdate']['year']
+                if upload.fields['birthdate'] else None
+            ),
+            'photo': (
+                upload.photo['id']
+                if upload.photo else None
+            ),
             'externals': [
                 {
                     "data": {
@@ -95,6 +126,17 @@ class HuntFlowApiConnector(BaseConnector):
         entity = ApplicantStatusesEntity(**serializer)
         return entity
 
+    def get_status_id_by_name(self, statuses: ApplicantStatusesEntity, name: str):
+        """
+        Получение id статуса по названию
+        """
+        try:
+            for status in statuses.items:
+                if status['name'] == name:
+                    return status['id']
+        except Exception:
+            raise WrongStatusNameException
+
     def get_vacancies(self, account_id: int) -> VacancyEntity:
         """
         Метод, возвращающий список вакансий компании
@@ -107,6 +149,17 @@ class HuntFlowApiConnector(BaseConnector):
         serializer = VacancySerializer().dump(vacancies_json)
         entity = VacancyEntity(**serializer)
         return entity
+
+    def get_vacancy_id_by_name(self, vacancies: VacancyEntity, name: str):
+        """
+        Получение id вакансии по имени
+        """
+        try:
+            for vacancy in vacancies.items:
+                if vacancy['position'] == name:
+                    return vacancy['id']
+        except Exception:
+            raise WrongVacancyNameException
 
     def add_applicant_to_vacancy(
             self,
