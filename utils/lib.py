@@ -21,7 +21,8 @@ def normalize(string: str) -> str:
 
 def get_full_path(folder: str, filename: str) -> str:
     """
-    Возвращает полное имя файла с расширением по имени папки и названию резюме
+    Возвращает полное имя файла резюме с расширением по
+    имени папки и названию резюме
     """
     files = os.listdir(f'./Resumes/{folder}')
     for file in files:
