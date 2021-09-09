@@ -53,3 +53,35 @@ class WrongStatusNameException(HuntFlowBaseException):
 
     def __str__(self) -> str:
         return self.message
+
+
+class TokenNotFoundException(HuntFlowBaseException):
+    """
+    Обработка ошибки не переданного токена
+    """
+
+    def __init__(
+            self,
+            message=('Токен не передан в параметрах '
+                     'командной строки, убедитесь, что передали его')):
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self) -> str:
+        return self.message
+
+
+class PathNotFoundException(HuntFlowBaseException):
+    """
+    Обработка ошибки не переданного пути к Excel таблице
+    """
+
+    def __init__(
+            self,
+            message=('Путь к таблице Excel не передан в параметрах '
+                     'командной строки, убедитесь, что передали его')):
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self) -> str:
+        return self.message
