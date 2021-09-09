@@ -3,10 +3,13 @@ from typing import Dict
 import requests
 
 from utils.base_connector import BaseConnector
-from utils.entities import ApplicantEntity, ApplicantStatusesEntity, VacancyEntity
-from utils.exceptions import WrongVacancyNameException, WrongStatusNameException
+from utils.entities import (ApplicantEntity, ApplicantStatusesEntity,
+                            VacancyEntity)
+from utils.exceptions import (WrongStatusNameException,
+                              WrongVacancyNameException)
 from utils.lib import get_file_name
-from utils.serializers import InputApplicantSerializer, ApplicantStatusesSerializer, VacancySerializer
+from utils.serializers import (ApplicantStatusesSerializer,
+                               InputApplicantSerializer, VacancySerializer)
 from utils.settings import HUNTFLOW
 
 

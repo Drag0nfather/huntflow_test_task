@@ -1,7 +1,8 @@
 from utils.argparse import parse_arguments
 from utils.connector import HuntFlowApiConnector
-from utils.excel import convert_excel_to_list, check_upload_field, add_success_point_to_applicant
-from utils.exceptions import TokenNotFoundException, PathNotFoundException
+from utils.excel import (add_success_point_to_applicant, check_upload_field,
+                         convert_excel_to_list)
+from utils.exceptions import PathNotFoundException, TokenNotFoundException
 from utils.lib import get_full_path
 from utils.settings import ACCOUNT_ID
 
