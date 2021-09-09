@@ -1,3 +1,6 @@
+# Сериализторы должны лежать в своей папке, а то неклево все закидывать в utils
+
+
 from marshmallow import Schema, fields
 
 

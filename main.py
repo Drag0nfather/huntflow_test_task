@@ -1,5 +1,9 @@
 from utils.argparse import parse_arguments
 from utils.connector import HuntFlowApiConnector
+# неправильные отступы должно быть
+# ... import (
+# ...
+# ) между предыдущей и следущей строкой должно быть не более 4 отступов
 from utils.excel import (add_success_point_to_applicant, check_upload_field,
                          convert_excel_to_list)
 from utils.exceptions import PathNotFoundException, TokenNotFoundException
@@ -7,6 +11,7 @@ from utils.lib import get_full_path
 from utils.settings import ACCOUNT_ID
 
 
+# В целом слишком большая функция, разбей ее на поменьше
 def main(token: str, path: str):
     # Проверка, что в таблице существует поле upload,
     # добавление его в противном случае
@@ -20,10 +25,14 @@ def main(token: str, path: str):
     # Получение списка всех статусов кандидатов
     statuses = connector.get_statuses(ACCOUNT_ID)
     for applicant in applicants:
+        # Что такое 0, сделай какой-нибудь Enum с определением, ну типа
+        # class AbobaEnum(Enum):
+        #   ABRACADABRA = 0
         if applicant['upload'] == 0:
+            # Никаких принтов в продовом коде
             print(applicant['ФИО'])
             # Получаем все поля кандидата из таблицы Excel
-            name = applicant['ФИО']
+            name = applicant['ФИО']  # Это можно сделать через сериализатор, ну или как минимум через .get(...)
             position = applicant['Должность']
             salary = applicant['Ожидания по ЗП']
             comment = applicant['Комментарий']
@@ -58,12 +67,16 @@ def main(token: str, path: str):
         continue
     print('Все кандидаты успешно обработаны')
     return
+    # Зачем тут return
 
 
 if __name__ == '__main__':
     args = parse_arguments()
     try:
         token = args.token
+    # No
+    # except TokenNotFoundException:
+    # raise (тут можно ничего не писать, он просто зарейзит ошибку из Except
     except Exception:
         raise TokenNotFoundException
     try:

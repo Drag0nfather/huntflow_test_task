@@ -13,6 +13,7 @@ def normalize(string: str) -> str:
     """
     Приводит букву "й" в Unicode к единому виду
     """
+    # Вынеси хародкод в енамы
     string = string.strip()
     old_chars = chr(1080) + chr(774)
     new_chars = chr(1081)

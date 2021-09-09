@@ -2,6 +2,7 @@ class HuntFlowBaseException(Exception):
     pass
 
 
+# Во многих эксепшнах беды с оттупами, поправь их
 class ExcelFileNotFoundException(HuntFlowBaseException):
     """
     Обработка ошибки отсутствия Excel файла

@@ -1,7 +1,7 @@
 from typing import Dict
 
 import requests
-
+# аналогично
 from utils.base_connector import BaseConnector
 from utils.entities import (ApplicantEntity, ApplicantStatusesEntity,
                             VacancyEntity)
@@ -49,6 +49,8 @@ class HuntFlowApiConnector(BaseConnector):
         """
         Метод добавления кандидата в базу HuntFlow
         """
+        # Нужно вынести в отдельный файл то что ниже (парсинг)
+        # Вот отсюда !!!
         body = {
             'last_name': upload.fields['name']['last'],
             'first_name': upload.fields['name']['first'],
@@ -106,13 +108,16 @@ class HuntFlowApiConnector(BaseConnector):
                 }
             ]
         }
+        # До сюда!!!
         request = requests.request(
             'POST',
             f'{HUNTFLOW}/account/{account_id}/applicants',
             headers=self.headers,
             json=body
         )
+        # Хардкод константы, юзай from http import HTTPStatuses или как она там
         if request.status_code == 200:
+            # Юзай тип бул для True, а не str
             return {'success': 'True', 'result': request.json()}
         return {'success': 'False', 'result': request.json()}
 
@@ -129,6 +134,7 @@ class HuntFlowApiConnector(BaseConnector):
         entity = ApplicantStatusesEntity(**serializer)
         return entity
 
+    # Может быть @staticmethod
     def get_status_id_by_name(self, statuses: ApplicantStatusesEntity, name: str):
         """
         Получение id статуса по названию
@@ -153,6 +159,7 @@ class HuntFlowApiConnector(BaseConnector):
         entity = VacancyEntity(**serializer)
         return entity
 
+    # Может быть @staticmethod
     def get_vacancy_id_by_name(self, vacancies: VacancyEntity, name: str):
         """
         Получение id вакансии по имени
@@ -165,6 +172,7 @@ class HuntFlowApiConnector(BaseConnector):
             raise WrongVacancyNameException
 
     def add_applicant_to_vacancy(
+        # Отступ должен быть на уровне это комментрария
             self,
             account_id: int,
             vacancy_id: int,
@@ -174,6 +182,7 @@ class HuntFlowApiConnector(BaseConnector):
         """
         Метод, прикрепляющий кандидата к вакансии компании
         """
+        # Парси отдельно
         body = {
             'vacancy': vacancy_id,
             'status': status_id,
@@ -190,6 +199,8 @@ class HuntFlowApiConnector(BaseConnector):
             headers=self.headers,
             json=body,
         )
+        # Не хардкоь
         if request.status_code == 200:
+            # Не 'True', а True
             return {'success': 'True', 'result': request.json()}
         return {'success': 'False', 'result': request.json()}
